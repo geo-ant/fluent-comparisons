@@ -1,7 +1,5 @@
 mod any_of;
-
-#[test]
-fn it_works() {
-    assert_eq!(2 + 2, 4);
-}
+mod all_of;
+mod none_of;
+mod exactly_one_of;
 
