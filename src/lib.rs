@@ -36,13 +36,13 @@ macro_rules! any_of {
     };
 
     // internal rules, recursion final case
-    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) => {
-        $expression || $head $op $rhs
+    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
+        $expanded || $head $op $rhs
     };
 
     // internal rules, recursion case
-    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) =>{
-        any_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expression || $head $op $rhs})
+    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
+        any_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded || $head $op $rhs})
     };
 }
 
@@ -59,13 +59,13 @@ macro_rules! all_of {
     };
 
     // internal rules, recursion final case
-    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) => {
-        $expression && $head $op $rhs
+    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
+        $expanded && $head $op $rhs
     };
 
     // internal rules, recursion case
-    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) =>{
-        all_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expression && $head $op $rhs})
+    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
+        all_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && $head $op $rhs})
     };
 }
 
@@ -82,13 +82,13 @@ macro_rules! none_of {
     };
 
     // internal rules, recursion final case
-    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) => {
-        $expression && !($head $op $rhs)
+    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
+        $expanded && !($head $op $rhs)
     };
 
     // internal rules, recursion case
-    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) =>{
-        none_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expression && !($head $op $rhs)})
+    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
+        none_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && !($head $op $rhs)})
     };
 }
 
@@ -104,12 +104,12 @@ macro_rules! exactly_one_of {
     };
 
     // internal rules, recursion final case
-    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) => {
-        $expression + if $head $op $rhs {1u32}else{0u32}
+    (@intern lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
+        $expanded + if $head $op $rhs {1u32}else{0u32}
     };
 
     // internal rules, recursion case
-    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expression:expr}) =>{
-        exactly_one_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expression + if $head $op $rhs {1u32}else{0u32}})
+    (@intern lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
+        exactly_one_of!(@intern lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded + if $head $op $rhs {1u32}else{0u32}})
     };
 }
