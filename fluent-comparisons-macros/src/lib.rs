@@ -1,10 +1,12 @@
+///! This crate contains the macros for the fluent-comparisons crate
+
 #[macro_export]
 #[doc(hidden)]
 /// # Internal Macro
 /// This macro checks that the comparison operator in the expression is indeed allowed. If it is
 /// allowed this macro evaluates to a unit/void statement. Otherwise it will give a compile error
 /// explaining which operators are allowed
-#[macro_export]
+//#[macro_export]
 #[doc(hidden)]
 macro_rules! __check_operator {
     // these are the allowed operators
@@ -31,12 +33,12 @@ macro_rules! any_of {
     };
     // internal rules, recursion final case
     (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded || $head $op $rhs
+        $expanded || ($head $op $rhs)
     };
 
     // internal rules, recursion case
     (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        any_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded || $head $op $rhs})
+        any_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded || ($head $op $rhs)})
     };
 }
 
@@ -54,12 +56,12 @@ macro_rules! all_of {
 
     // internal rules, recursion final case
     (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded && $head $op $rhs
+        $expanded && ($head $op $rhs)
     };
 
     // internal rules, recursion case
     (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        all_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && $head $op $rhs})
+        all_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && ($head $op $rhs)})
     };
 }
 
@@ -99,11 +101,11 @@ macro_rules! exactly_one_of {
 
     // internal rules, recursion final case
     (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded + if $head $op $rhs {1u32}else{0u32}
+        $expanded + {if $head $op $rhs {1u32}else{0u32}}
     };
 
     // internal rules, recursion case
     (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        exactly_one_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded + if $head $op $rhs {1u32}else{0u32}})
+        exactly_one_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded + {if $head $op $rhs {1u32}else{0u32}}})
     };
 }
