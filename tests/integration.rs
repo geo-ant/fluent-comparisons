@@ -10,6 +10,8 @@ use assert2::assert as assert2;
 
 #[test]
 fn test_accessibility() {
-    todo!()
-    //assert2!()
+    assert2!( all_of!({1,2,3} <= 4)
+        && none_of!({-1,0,-100}>0)
+        && exactly_one_of!({1,2,3,4} >= 4)
+        && any_of!({-1,2,3}==2));
 }
