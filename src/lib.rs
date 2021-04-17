@@ -1,6 +1,5 @@
 //! TODO Document this library
 
-
 pub use fluent_comparisons_macros::any_of;
 
 pub use fluent_comparisons_macros::all_of;

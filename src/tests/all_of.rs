@@ -16,8 +16,8 @@ fn twice(val: usize) -> usize {
 // handcraft test cases to thest the logic of all_of for the case of operator ==
 fn all_of_comparisons_give_correct_result_for_operator_equal() {
     // simple expressions of one or two literals
-    assert!(all_of!( {4} == 4));
-    assert_eq!(all_of!( {2} == 4), false);
+    assert!(all_of!({ 4 } == 4));
+    assert_eq!(all_of!({ 2 } == 4), false);
     assert_eq!(all_of!( {4,2} == 4), false);
     assert_eq!(all_of!( {2,4} == 4), false);
     assert_eq!(all_of!( {2,2} == 2), true);
@@ -35,7 +35,10 @@ fn all_of_comparisons_give_correct_result_for_operator_equal() {
     // some other expressions for good measure
     assert_eq!(all_of!( {4,4,4,1,-1,2,4} == 4), false);
     assert_eq!(all_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6), true);
-    assert_eq!(all_of!( {6,6,6,6,6,2_i32.pow(2)+2,2*v.len(),1234} == 6), false);
+    assert_eq!(
+        all_of!( {6,6,6,6,6,2_i32.pow(2)+2,2*v.len(),1234} == 6),
+        false
+    );
 }
 
 #[test]
@@ -74,12 +77,26 @@ fn test_random_collection_of_values_behave_correctly() {
         let e = rng.gen_range(-5..5);
         let rhs = rng.gen_range(-5..5);
 
-        assert_eq!(all_of!({a,b,c,d,e}==rhs), [a, b, c, d, e].iter().all(|v| v == &rhs));
-        assert_eq!(all_of!({a,b,c,d,e}<=rhs), [a, b, c, d, e].iter().all(|v| v <= &rhs));
-        assert_eq!(all_of!({a,b,c,d,e}>=rhs), [a, b, c, d, e].iter().all(|v| v >= &rhs));
-        assert_eq!(all_of!({a,b,c,d,e}>rhs), [a, b, c, d, e].iter().all(|v| v > &rhs));
-        assert_eq!(all_of!({a,b,c,d,e}<rhs), [a, b, c, d, e].iter().all(|v| v < &rhs));
-
+        assert_eq!(
+            all_of!({a,b,c,d,e}==rhs),
+            [a, b, c, d, e].iter().all(|v| v == &rhs)
+        );
+        assert_eq!(
+            all_of!({a,b,c,d,e}<=rhs),
+            [a, b, c, d, e].iter().all(|v| v <= &rhs)
+        );
+        assert_eq!(
+            all_of!({a,b,c,d,e}>=rhs),
+            [a, b, c, d, e].iter().all(|v| v >= &rhs)
+        );
+        assert_eq!(
+            all_of!({a,b,c,d,e}>rhs),
+            [a, b, c, d, e].iter().all(|v| v > &rhs)
+        );
+        assert_eq!(
+            all_of!({a,b,c,d,e}<rhs),
+            [a, b, c, d, e].iter().all(|v| v < &rhs)
+        );
     }
 }
 
@@ -89,7 +106,7 @@ fn expressions_are_short_circuited_and_evaluated_left_to_right() {
     // and helps me count how often the twice function was invoked
     let counter: Cell<i32> = Cell::new(0);
     let twice = |i: i32| {
-         counter.set(counter.get() + 1);
+        counter.set(counter.get() + 1);
         2 * i
     };
 
