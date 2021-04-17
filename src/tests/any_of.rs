@@ -1,10 +1,14 @@
+#![allow(clippy::int_plus_one)]
+#![allow(clippy::many_single_char_names)]
+#![allow(clippy::assertions_on_constants)]
+
 use crate::any_of;
 use rand::prelude::*;
-use std::ops::Mul;
 use std::cell::Cell;
+use std::ops::Mul;
 
 // a helper function that squares its argument
-fn square<T:Mul<Output=T>+Copy>(val :T ) -> T {
+fn square<T: Mul<Output = T> + Copy>(val: T) -> T {
     val * val
 }
 
@@ -22,13 +26,19 @@ fn any_of_comparisons_give_correct_result_for_operator_equal() {
     // test more complicated expressions with 3 elements
     //assert_eq!()
 
-    let v = vec!{1,2};
-    assert_eq!(any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} == (3f64-3.).cos()), true);
+    let v = vec![1, 2];
+    assert_eq!(
+        any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} <= -std::f64::EPSILON),
+        true
+    );
     assert_eq!(any_of!( {v.len(),2_usize.pow(2),3*4+1} == v.len()), true);
     assert_eq!(any_of!( {3_usize.pow(2),333,1+1} == v.len()), true);
     assert_eq!(any_of!( {v.len(),2,1+1} == v.len()), true);
     assert_eq!(any_of!( {v.len(),2,1} == v.len().pow(1)), true);
-    assert_eq!(any_of!( {v.len()/2,v.len()-1,v.len().pow(4)} == v.len()), false);
+    assert_eq!(
+        any_of!( {v.len()/2,v.len()-1,v.len().pow(4)} == v.len()),
+        false
+    );
 }
 
 #[test]
@@ -36,20 +46,20 @@ fn any_of_comparisons_give_correct_result_for_operator_equal() {
 // to make sure it works, nonetheless
 fn test_any_of_comparisons_for_other_comparison_operators() {
     // !=
-    assert_eq!(any_of!({2,2,-2,123}!=2),true);
-    assert_eq!(any_of!({square(2),2*2}!=4),false);
+    assert_eq!(any_of!({2,2,-2,123}!=2), true);
+    assert_eq!(any_of!({square(2),2*2}!=4), false);
     // <=
-    assert_eq!(any_of!({square(3),8,120,1}<=8),true);
-    assert_eq!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}<=8),false);
+    assert_eq!(any_of!({square(3),8,120,1}<=8), true);
+    assert_eq!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}<=8), false);
     // >=
-    assert_eq!(any_of!({-11,3}>=-11),true);
-    assert_eq!(any_of!({square(2+1),-4}>=10),false);
+    assert_eq!(any_of!({-11,3}>=-11), true);
+    assert_eq!(any_of!({square(2+1),-4}>=10), false);
     // <
-    assert_eq!(any_of!({square(3),7,120,1}<8),true);
-    assert_eq!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}<8),false);
+    assert_eq!(any_of!({square(3),7,120,1}<8), true);
+    assert_eq!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}<8), false);
     // >
-    assert_eq!(any_of!({-11,3}>-10),true);
-    assert_eq!(any_of!({-11,3}>4),false);
+    assert_eq!(any_of!({-11,3}>-10), true);
+    assert_eq!(any_of!({-11,3}>4), false);
 }
 
 #[test]
@@ -76,7 +86,6 @@ fn expressions_are_short_circuited_and_evaluated_left_to_right() {
     assert!(eval);
     assert_eq!(counter.get(), 2);
 }
-
 
 #[test]
 // use some randomness for asserting theories that should always be true. So I just calculate
