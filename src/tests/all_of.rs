@@ -46,6 +46,10 @@ fn all_of_comparisons_give_correct_result_for_operator_equal() {
 // we actually put in there, but we'll test it anyway just to be sure
 fn all_of_comparisons_give_correct_result_for_other_operators() {
     let v = vec!["hello", "there", "this", "is", "a", "test"];
+    // !=
+    assert_eq!(all_of!( {1,2+v.len(),twice(3)-2} != 6), true);
+    assert_eq!(all_of!( {2*2+1,v.len(),twice(3)} != 6), false);
+
     // <=
     assert_eq!(all_of!( {1,v.len(),twice(2)} <= 6), true);
     assert_eq!(all_of!( {2*2+1,v.len(),twice(2),-10,7} <= 6), false);
@@ -74,28 +78,31 @@ fn test_random_collection_of_values_behave_correctly() {
         let b = rng.gen_range(-5..5);
         let c = rng.gen_range(-5..5);
         let d = rng.gen_range(-5..5);
-        let e = rng.gen_range(-5..5);
         let rhs = rng.gen_range(-5..5);
 
         assert_eq!(
-            all_of!({a,b,c,d,e}==rhs),
-            [a, b, c, d, e].iter().all(|v| v == &rhs)
+            all_of!({a,b,c,d}==rhs),
+            [a, b, c, d].iter().all(|v| v == &rhs)
         );
         assert_eq!(
-            all_of!({a,b,c,d,e}<=rhs),
-            [a, b, c, d, e].iter().all(|v| v <= &rhs)
+            all_of!({a,b,c,d}<=rhs),
+            [a, b, c, d].iter().all(|v| v <= &rhs)
         );
         assert_eq!(
-            all_of!({a,b,c,d,e}>=rhs),
-            [a, b, c, d, e].iter().all(|v| v >= &rhs)
+            all_of!({a,b,c,d}>=rhs),
+            [a, b, c, d].iter().all(|v| v >= &rhs)
         );
         assert_eq!(
-            all_of!({a,b,c,d,e}>rhs),
-            [a, b, c, d, e].iter().all(|v| v > &rhs)
+            all_of!({a,b,c,d}>rhs),
+            [a, b, c, d].iter().all(|v| v > &rhs)
         );
         assert_eq!(
-            all_of!({a,b,c,d,e}<rhs),
-            [a, b, c, d, e].iter().all(|v| v < &rhs)
+            all_of!({a,b,c,d}<rhs),
+            [a, b, c, d].iter().all(|v| v < &rhs)
+        );
+        assert_eq!(
+            all_of!({a,b,c,d}!=rhs),
+            [a, b, c, d].iter().all(|v| v != &rhs)
         );
     }
 }
