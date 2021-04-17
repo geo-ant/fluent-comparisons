@@ -4,7 +4,7 @@ use std::rc::Rc;
 use std::cell::{RefCell, Cell};
 
 #[test]
-fn test_simple() {
+fn simple_expressions_give_correct_result() {
     let v = vec! {1, 2, 3};
     let cond1 = all_of!( {1,2*v.len(),4} == 6);
     let cond2 = all_of!( {1,-1,2} == 4);
@@ -17,7 +17,7 @@ fn test_simple() {
 }
 
 #[test]
-fn test_lazyness() {
+fn expressions_are_short_circuited_and_evaluated_left_to_right() {
     // use this as a variable that indicates mutable state
     // and helps me count how often the twice function was invoked
     let counter: Cell<i32> = Cell::new(0);

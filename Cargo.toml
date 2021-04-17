@@ -7,6 +7,14 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# We can specify a local path dependency as well as a version. If building locally, the local path will
+# be used, but on crates.io the version dependency will be used, which is just extremely helpful for development.
+# See this Reddit post: https://www.reddit.com/r/rust/comments/a39er8/how_do_you_publish_your_cargo_workspace_packages/
+# And the Rust Doc: https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-path-dependencies
+fluent-comparisons-macros = {version = "0.1.0", path = "fluent-comparisons-macros"}
+
+[workspace]
+members = ["fluent-comparisons-macros"]
 
 [dev-dependencies]
 assert2 = "0.3"
