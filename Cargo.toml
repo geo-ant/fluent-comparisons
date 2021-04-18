@@ -8,6 +8,7 @@ repository = "https://github.com/geo-ant/fluent-comparisons"
 categories = ["algorithms", "development tools"]
 description = "Boost legibility by writing multicomparison expressions like `if any_of!({a,b,c}>=5) {...}` while keeping the benefits as hand-written code."
 readme = "README.md"
+license = "MIT"
 keywords = ["fluent","DRY","multi","comparison","expressions"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
