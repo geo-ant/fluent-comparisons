@@ -20,7 +20,33 @@ macro_rules! __check_operator {
     ($other:tt) => {std::compile_error!("Comparison operator not allowed. The only allowed comparison operators are ==, !=, <=, >=, <, >");}
 }
 
-///TODO DOCUMENT ANY OF
+/// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for any value in the set.
+///
+/// # Lazy Evaluation
+/// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means the comparisons are
+/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
+/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `any_of!({1,some_func()}<5)`,
+/// the function `some_func()` is not invoked.
+///
+/// # Macro Syntax and Examples
+/// The macro is called as `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
+/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
+/// can also be an expression. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
+/// curly braces.
+///
+/// ## Examples
+/// The following examples show how to use the macro.
+/// ```
+/// # use fluent_comparisons_macros::any_of;
+/// use rand::prelude::*;
+///
+/// let square = |val|val*val;
+/// assert!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}>8));
+///
+/// let v = vec![1, 2,3];
+/// let mut rng = rand::thread_rng();
+/// assert!(any_of!( {rng.gen::<usize>(),v.len(),2,1+1,"hello world".len()} == v.len()));
+/// ```
 #[macro_export]
 macro_rules! any_of {
     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
