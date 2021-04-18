@@ -7,16 +7,15 @@ fn twice(val: usize) -> usize {
     2 * val
 }
 
-
 #[test]
 fn none_of_comparisons_give_correct_result_for_operator_equal() {
     // test simple expressions
-    assert_eq!(none_of!({4}==2),true);
-    assert_eq!(none_of!({4}==4),false);
-    assert_eq!(none_of!({"four","two"} == "three"),true);
-    assert_eq!(none_of!({"four","two"} == "two"),false);
-    assert_eq!(none_of!({"two","two"} == "two"),false);
-    assert_eq!(none_of!({"two","four"} == "two"),false);
+    assert_eq!(none_of!({ 4 } == 2), true);
+    assert_eq!(none_of!({ 4 } == 4), false);
+    assert_eq!(none_of!({"four","two"} == "three"), true);
+    assert_eq!(none_of!({"four","two"} == "two"), false);
+    assert_eq!(none_of!({"two","two"} == "two"), false);
+    assert_eq!(none_of!({"two","four"} == "two"), false);
 
     // more complex expressions
     let v = vec![1, 2, 3];
@@ -27,13 +26,15 @@ fn none_of_comparisons_give_correct_result_for_operator_equal() {
     assert_eq!(none_of!( {6+1,2*v.len()+2,twice(3)/2} == 5+1), true);
 
     // more complex expr
-    assert_eq!(none_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6), false);
+    assert_eq!(
+        none_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6),
+        false
+    );
     assert_eq!(none_of!( {4,4,4,1,-1,2,4} == 3), true);
     assert_eq!(
         none_of!( {6,6,6,6,6,2_i32.pow(2)+2,2*v.len(),1234} == 6),
         false
     );
-
 }
 
 #[test]
@@ -41,20 +42,20 @@ fn test_none_of_comparisons_for_other_operators() {
     let v = vec!["hello", "there", "this", "is", "a", "test"];
 
     // !=
-    assert_eq!(none_of!({6,2_usize.pow(2),v.len(),7}!=6),false);
-    assert_eq!(none_of!({6,2_usize.pow(2)+2,v.len(),7-1}!=6),true);
+    assert_eq!(none_of!({6,2_usize.pow(2),v.len(),7}!=6), false);
+    assert_eq!(none_of!({6,2_usize.pow(2)+2,v.len(),7-1}!=6), true);
     // <=
-    assert_eq!(none_of!({7,8,9}<=6),true);
-    assert_eq!(none_of!({6,7,8,9}<=6),false);
+    assert_eq!(none_of!({7,8,9}<=6), true);
+    assert_eq!(none_of!({6,7,8,9}<=6), false);
     // >=
-    assert_eq!(none_of!({7,8,9}>=6),false);
-    assert_eq!(none_of!({4,4,3,1}>=6),true);
+    assert_eq!(none_of!({7,8,9}>=6), false);
+    assert_eq!(none_of!({4,4,3,1}>=6), true);
     // >
-    assert_eq!(none_of!({6,1,2,7,8,9}>6),false);
-    assert_eq!(none_of!({4,4,3,1,5}>6),true);
+    assert_eq!(none_of!({6,1,2,7,8,9}>6), false);
+    assert_eq!(none_of!({4,4,3,1,5}>6), true);
     // <
-    assert_eq!(none_of!({6,7,8,9}<6),true);
-    assert_eq!(none_of!({7,8,6,2,7}<6),false);
+    assert_eq!(none_of!({6,7,8,9}<6), true);
+    assert_eq!(none_of!({7,8,6,2,7}<6), false);
 }
 
 #[test]
@@ -77,12 +78,10 @@ fn expressions_are_short_circuited_and_evaluated_left_to_right() {
     counter.set(0);
 
     // this proves that the array way of doing things requires an eager evaluation
-    let eval = [1, twice(3), twice(3), 3].iter().all(|val| !(val == &6));
+    let eval = [1, twice(3), twice(3), 3].iter().all(|val| (val != &6));
     assert!(!eval);
     assert_eq!(counter.get(), 2);
 }
-
-
 
 #[test]
 // use some randomness for asserting theories that should always be true. So I just calculate
@@ -90,6 +89,7 @@ fn expressions_are_short_circuited_and_evaluated_left_to_right() {
 // calculate using standard library iterators.
 // Inspired by the "Beautiful Testing" chapter in the book "Beautiful Code", O'Reilly
 // https://www.oreilly.com/library/view/beautiful-code/9780596510046/
+#[allow(clippy::nonminimal_bool)]
 fn test_random_collection_of_values_behave_correctly() {
     let mut rng = thread_rng();
 
