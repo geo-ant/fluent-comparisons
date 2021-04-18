@@ -6,7 +6,7 @@ edition = "2018"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
 repository = "https://github.com/geo-ant/fluent-comparisons"
 categories = ["algorithms", "development tools"]
-description = "Write expressions like `if any_of!({a,b,c}>=5) {...}` to boost readability with the same benefits as hand-written code, such as lazy evaluation and boolean short-circuiting."
+description = "Boost code legibility by writing comparison expressions like `if any_of!({a,b,c}>=5) {...}` while keeping the benefits as hand-written code, such as lazy evaluation and boolean short-circuiting."
 readme = "README.md"
 keywords = ["fluent","DRY","multi","comparison","expressions"]
 
