@@ -3,7 +3,7 @@
 ![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg?branch=main)
 ![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg?branch=main)
 
-A crate offering a fluent syntax for comparing multiple left hand sides to one common right hand side.
+A crate offering a fluent syntax for multi-comparisons.
 
 ## Motivation
 
@@ -44,3 +44,7 @@ The macros are called as `any_of!({/*list of expressions*/} operator rhs)`, wher
 The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular, the expressions need not be numeric. 
 
 The same goes for the `all_of` and `none_of` macros. Check the docs for more information.
+
+## Links
+
+This library is inspired by Björn Fahller's [DRY comparisons](https://github.com/rollbear/dry-comparisons) library, which I read about [in this blog post](https://www.fluentcpp.com/2020/01/03/dry-comparisons-a-c-library-to-shorten-redundant-if-statements/) on Jonathan Boccara's blog.
