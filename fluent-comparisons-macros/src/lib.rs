@@ -20,7 +20,36 @@ macro_rules! __check_operator {
     ($other:tt) => {std::compile_error!("Comparison operator not allowed. The only allowed comparison operators are ==, !=, <=, >=, <, >");}
 }
 
-///TODO DOCUMENT ANY OF
+/// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *any of the values* in the set.
+///
+/// # Lazy Evaluation
+/// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
+/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
+/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `any_of!({1,some_func()}<5)`,
+/// the function `some_func()` is not invoked.
+///
+/// # Macro Syntax and Examples
+/// The macro is called as `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
+/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
+/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
+/// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
+/// the expressions need not be numeric.
+///
+/// ## Examples
+/// The following examples show how to use the macro.
+/// ```
+/// # use fluent_comparisons_macros::any_of;
+/// use rand::prelude::*;
+///
+/// let square = |val|val*val;
+/// // the following assertion holds
+/// assert!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}>8));
+///
+/// let v = vec![1, 2,3];
+/// let mut rng = rand::thread_rng();
+/// // the following assertion holds
+/// assert!(any_of!( {rng.gen::<usize>(),v.len(),2,1+1,"hello world".len()} == v.len()));
+/// ```
 #[macro_export]
 macro_rules! any_of {
     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
@@ -42,7 +71,34 @@ macro_rules! any_of {
     };
 }
 
-///TODO DOCUMENT
+/// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *all of the values* in the set.
+///
+/// # Lazy Evaluation
+/// If we write `let cond = all_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
+/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
+/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `all_of!({1,some_func()}<5)`,
+/// the function `some_func()` is not invoked.
+///
+/// # Macro Syntax and Examples
+/// The macro is called as `all_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
+/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
+/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
+/// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
+/// the expressions need not be numeric.
+///
+/// ## Examples
+/// The following examples show how to use the macro.
+/// ```
+/// # use fluent_comparisons_macros::all_of;
+///
+/// let square = |val|val*val;
+/// // the following assertion holds
+/// assert!(all_of!({4+4+1,square(7*2),120_i32.pow(2)}>0));
+///
+/// let v = vec![1, 2,3,4,5];
+/// // the following assertion holds
+/// assert!(all_of!( {square(2),v.len() as i32,2,1+1,"hello".len() as i32} <= v.len() as i32));
+/// ```
 #[macro_export]
 macro_rules! all_of {
     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
@@ -65,7 +121,34 @@ macro_rules! all_of {
     };
 }
 
-///TODO DOCUMENT
+/// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *none of the values* in the set.
+///
+/// # Lazy Evaluation
+/// If we write `let cond = none_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
+/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
+/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `none_of!({1,some_func()}<5)`,
+/// the function `some_func()` is not invoked.
+///
+/// # Macro Syntax and Examples
+/// The macro is called as `none_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
+/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
+/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
+/// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
+/// the expressions need not be numeric.
+///
+/// ## Examples
+/// The following examples show how to use the macro.
+/// ```
+/// # use fluent_comparisons_macros::none_of;
+///
+/// let square = |val|val*val;
+/// // the following assertion holds
+/// assert!(none_of!({4+4+1,square(7*2),120_i32.pow(2)}<0));
+///
+/// let v = vec![1, 2,3,4,5];
+/// // the following assertion holds
+/// assert!(none_of!( {square(2),v.len() as i32,2,1+1,"hello".len() as i32} > v.len() as i32));
+/// ```
 #[macro_export]
 macro_rules! none_of {
     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
