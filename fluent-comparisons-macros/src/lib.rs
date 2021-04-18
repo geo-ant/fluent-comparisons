@@ -88,7 +88,7 @@ macro_rules! none_of {
     };
 }
 
-// TODO DOCUMENT
+// TODO FINISH THIS UP, TEST IT AND DOCUMENT IT
 // #[macro_export]
 // macro_rules! exactly_one_of {
 //     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
