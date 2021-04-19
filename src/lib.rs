@@ -1,6 +1,49 @@
-//! This library provides a number of macros to make multicomparison expressions less annoying to
-//! write while still keeping the benefits of hand-written code, such as lazy evaluation and
-//! boolean short circuiting. Go to any of the macros to find out about their usage.
+//! This crate is for you if you have ever gotten annoyed at writing repetitive conditions like this
+//! ```rust
+//! # fn test(a:i32,x:i32,y:i32,z:i32) {
+//! if x < a && y < a && z < a {
+//! // ... do something
+//! }
+//! # }
+//! ```
+//! and wished you could replace that code by something more expressive and less repetitive? Now you can rewrite the code as
+//! ```rust
+//!# fn test(a:i32,x:i32,y:i32,z:i32) {
+//! use fluent_comparisons::all_of;
+//!
+//! if all_of!({x,y,z} < a) {
+//! // ... do something
+//! }
+//! # }
+//! ```
+//!
+//! ## Brief Description and Key Advantages
+//!
+//! The crate provides the macros `any_of`, `all_of` and `none_of` to facilitate writing expressive multicomparisons.
+//! In addition to providing an intuitive syntax, the macros compile to the same assembly as
+//! the handwritten code ([check it on godbolt.org](https://godbolt.org/z/M3494a6Mc)).
+//!
+//! A further benefit is [lazy evaluation](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from
+//! left to right as seen in the next snippet:
+//!
+//! ```rust
+//! use fluent_comparisons::any_of;
+//!
+//! # fn cheap_calc(v : usize)-> usize {v}
+//! # fn expensive_calc(v : usize)-> usize {v}
+//! # fn test(arg1: usize, arg2:usize) {
+//! // if cheap_calc(arg1) <=5, then the expensive calculation
+//! // is never performed
+//! let b = any_of!({cheap_calc(arg1), expensive_calc(arg2)}<=5);
+//! // whereas if we did this, the expensive calculation would be
+//! // performed regardless of the result of cheap_calculation(arg1)
+//! let b = [cheap_calc(arg1), expensive_calc(arg2)].iter().any(|val|val<=&5);
+//! # }
+//! ```
+//!
+//! ## Usage
+//!
+//! Refer to the items in the documentation below to learn about the usage of the macros.
 
 pub use fluent_comparisons_macros::any_of;
 

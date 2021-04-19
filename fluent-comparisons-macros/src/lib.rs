@@ -52,22 +52,11 @@ macro_rules! __check_operator {
 /// ```
 #[macro_export]
 macro_rules! any_of {
-    //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
-    // expression like any_of!( {1,v.len(),4} < 3)
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
-            any_of!(@internal lhs={$($lh_sides),+}, op=[$operator], rhs = $rhs, expanded = {false})
+            $( ($lh_sides $operator $rhs) )||+
         }
-    };
-    // internal rules, recursion final case
-    (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded || ($head $op $rhs)
-    };
-
-    // internal rules, recursion case
-    (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        any_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded || ($head $op $rhs)})
     };
 }
 
@@ -101,23 +90,11 @@ macro_rules! any_of {
 /// ```
 #[macro_export]
 macro_rules! all_of {
-    //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
-    // expression like any_of!( {1,v.len(),4} < 3)
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
-            all_of!(@internal lhs={$($lh_sides),+}, op=[$operator], rhs = $rhs, expanded = {true})
+            $( ($lh_sides $operator $rhs) )&&+
         }
-    };
-
-    // internal rules, recursion final case
-    (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded && ($head $op $rhs)
-    };
-
-    // internal rules, recursion case
-    (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        all_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && ($head $op $rhs)})
     };
 }
 
@@ -151,27 +128,16 @@ macro_rules! all_of {
 /// ```
 #[macro_export]
 macro_rules! none_of {
-    //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
-    // expression like any_of!( {1,v.len(),4} < 3)
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
-            none_of!(@internal lhs={$($lh_sides),+}, op=[$operator], rhs = $rhs, expanded = {true})
+            $( !($lh_sides $operator $rhs) )&&+
         }
-    };
-
-    // internal rules, recursion final case
-    (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-        $expanded && !($head $op $rhs)
-    };
-
-    // internal rules, recursion case
-    (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-        none_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded && !($head $op $rhs)})
     };
 }
 
 // TODO FINISH THIS UP, TEST IT AND DOCUMENT IT
+// TODO: make this as simple as the ones above w/o recursion
 // #[macro_export]
 // macro_rules! exactly_one_of {
 //     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
