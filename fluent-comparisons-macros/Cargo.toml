@@ -1,6 +1,6 @@
 [package]
 name = "fluent-comparisons-macros"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["geo-ant <geos.blog@posteo.de>"]
 edition = "2018"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
@@ -8,6 +8,7 @@ repository = "https://github.com/geo-ant/fluent-comparisons"
 description = "Macros for the fluent-comparisons crate."
 categories = ["algorithms", "development tools"]
 license = "MIT"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
