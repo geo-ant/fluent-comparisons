@@ -1,4 +1,4 @@
-//! This crate is for you if you have ever gotten annoyed at writing repetitive conditions like this
+//! This crate is for you if you have ever been annoyed at writing repetitive conditions like this
 //! ```rust
 //! # fn test(a:i32,x:i32,y:i32,z:i32) {
 //! if x < a && y < a && z < a {
@@ -6,7 +6,7 @@
 //! }
 //! # }
 //! ```
-//! and wished you could replace that code by something more expressive and less repetitive? Now you can rewrite the code as
+//! and wished you could replace that code by something more expressive and less repetitive. Now you can rewrite the code as
 //! ```rust
 //!# fn test(a:i32,x:i32,y:i32,z:i32) {
 //! use fluent_comparisons::all_of;

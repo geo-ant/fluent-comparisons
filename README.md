@@ -7,14 +7,14 @@
 
 ## Motivation
 
-This crate is for you if you have ever gotten annoyed at writing repetitive conditions like this
+This crate is for you if you have ever been annoyed at writing repetitive conditions like this
 
 ```rust
 if x < a && y < a && z < a {
     // ... do something
 }
 ``` 
-and wished you could replace that code by something more expressive and less repetitive? Now you can write the condition above as
+and wished you could replace that code by something more expressive and less repetitive. Now you can write the condition above as
 ```rust
 use fluent_comparisons::all_of;
 
