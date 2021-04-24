@@ -52,6 +52,25 @@ macro_rules! __check_operator {
 /// ```
 #[macro_export]
 macro_rules! any_of {
+    //TODO: DOCUMENT THIS VARIANT WITH MAP (WITHOUT RHS)
+    ( {$($lh_sides:expr),+}.satisfies($($func:tt)+) ) => {
+        {
+            //$crate::__check_operator!($operator);
+            let map_func = $($func)+;
+            $( map_func($lh_sides) )||+
+        }
+    };
+
+    //TODO: DOCUMENT THIS VARIANT WITH MAP (WITH RHS)
+    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+        {
+            $crate::__check_operator!($operator);
+            let map_func = $($func)+;
+            $( map_func($lh_sides) $operator $rhs)||+
+        }
+    };
+
+    //variant without map (requires a comparison operator and rhs)
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
