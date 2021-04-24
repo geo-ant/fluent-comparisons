@@ -25,3 +25,4 @@ members = ["fluent-comparisons-macros"]
 
 [dev-dependencies]
 rand = "0.8"
+macrotest = "1.0"
