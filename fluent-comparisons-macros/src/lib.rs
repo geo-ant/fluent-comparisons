@@ -54,11 +54,7 @@ macro_rules! __check_operator {
 macro_rules! any_of {
     //TODO: DOCUMENT THIS VARIANT WITH MAP (WITHOUT RHS)
     ( {$($lh_sides:expr),+}.satisfies($($func:tt)+) ) => {
-        {
-            //$crate::__check_operator!($operator);
-            let map_func = $($func)+;
-            $( map_func($lh_sides) )||+
-        }
+        any_of!({$($lh_sides),+}.map($($func)+)==true)
     };
 
     //TODO: DOCUMENT THIS VARIANT WITH MAP (WITH RHS)
