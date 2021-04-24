@@ -20,7 +20,11 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - run: cargo install cargo-expand
+#      - run: cargo install cargo-expand #this is potentially slower than the thing below
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: cargo-expand
+          version: latest
       - uses: actions-rs/cargo@v1
         with:
           command: test
