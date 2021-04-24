@@ -20,7 +20,13 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+#      - run: cargo install cargo-expand #this is potentially slower than using the action below
+#      - uses: actions-rs/install@v0.1
+#        with:
+#          crate: cargo-expand
+#          version: latest
+#          use-tool-cache: true #see https://github.com/marketplace/actions/rust-cargo-install
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --workspace
+          args: --workspace -- --skip macro_expansion # explicitly skip all macro expansion tests here

@@ -1,0 +1,27 @@
+name: approval-tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Approval Tests for Macro Expansion
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly # macro expansion tests need the nightly toolchain
+          override: true
+      - run: cargo install cargo-expand #this is potentially slower than using the action below
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: macro_expansion # explicitly only run the tests from the macro_expansion module
