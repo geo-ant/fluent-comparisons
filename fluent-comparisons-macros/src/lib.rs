@@ -9,24 +9,28 @@
 //#[macro_export]
 #[doc(hidden)]
 macro_rules! __check_operator {
-    // these are the allowed operators
+    // these are the allowed comparison operators
     (==) => {};
     (<=) => {};
     (>=) => {};
     (!=) => {};
     (<) => {};
     (>) => {};
-    // everything else is not allowed
-    ($other:tt) => {std::compile_error!("Comparison operator not allowed. The only allowed comparison operators are ==, !=, <=, >=, <, >");}
+    // everything else is not allowed, including &&, ||, and such
+    ($other:tt) => {std::compile_error!("This operator is not allowed. The only allowed operators are ==, !=, <=, >=, <, >");}
 }
 
 /// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *any of the values* in the set.
 ///
 /// # Lazy Evaluation
-/// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
+/// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = a<c && b<c`. That means that the comparisons are
 /// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
-/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `any_of!({1,some_func()}<5)`,
+/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for the expression `any_of!({1,some_func()}<5)`,
 /// the function `some_func()` is not invoked.
+///
+///TODO: SPLIT DOCUMENTATION INTO THE BASIC USAGE, THE USAGE WITH TRANSFORMATIONS (MAP) AND THE USAGE WITH A PREDICATE (for predicate
+/// say that using the simple comparison operators makes not so much sense, but more complex predicates like is_prime or is_encrypted could make sense)
+/// also say that the predicate must be a function of the data to bool
 ///
 /// # Macro Syntax and Examples
 /// The macro is called as `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
@@ -52,15 +56,23 @@ macro_rules! __check_operator {
 /// ```
 #[macro_export]
 macro_rules! any_of {
-    //TODO: DOCUMENT THIS VARIANT WITH MAP (WITHOUT RHS)
+    // variant with a predicate (does not use a comparison operator and rhs)
     ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
         any_of!({$($lh_sides),+}.map($($func)+)==true)
     };
 
-    //TODO: DOCUMENT THIS VARIANT WITH MAP (WITH RHS)
+    // variant with a transformation of the set
     ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
         {
             $crate::__check_operator!($operator);
+            //by fixing this here, we have more type deduction powers but also less
+            //flexibility in generic arguments. We could also pass the expanded tt func to a single
+            //tt in a submacro (by putting (...) around it) and then use that function, which is more
+            //powerful when passing generic functions, but less intuitive when passing lambdas
+            //so this map is more akin to a map in a collection. The other is more akin to a C++
+            //transform of a heterogeneous collection. For that we might want to pass a path or ident
+            //instead of the token tree. Because the token tree is just a trick to get lambdas
+            //as well. But since the other way isn't great for lambdas anyway we can just skip it.
             let map_func = $($func)+;
             $( (map_func($lh_sides) $operator $rhs) )||+
         }
@@ -77,18 +89,9 @@ macro_rules! any_of {
 
 /// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *all of the values* in the set.
 ///
-/// # Lazy Evaluation
-/// If we write `let cond = all_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
-/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
-/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `all_of!({1,some_func()}<5)`,
-/// the function `some_func()` is not invoked.
-///
-/// # Macro Syntax and Examples
-/// The macro is called as `all_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
-/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
-/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
-/// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
-/// the expressions need not be numeric.
+/// # Usage
+/// The usage is analogous to the [any_of](crate::any_of) macro and is documented in more detail there.
+/// Just like `any_of`, this macro also performs lazy evaluation.
 ///
 /// ## Examples
 /// The following examples show how to use the macro.
@@ -105,6 +108,19 @@ macro_rules! any_of {
 /// ```
 #[macro_export]
 macro_rules! all_of {
+
+    ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
+        all_of!({$($lh_sides),+}.map($($func)+)==true)
+    };
+
+    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+        {
+            $crate::__check_operator!($operator);
+            let map_func = $($func)+;
+            $( (map_func($lh_sides) $operator $rhs) )&&+
+        }
+    };
+
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
@@ -115,18 +131,9 @@ macro_rules! all_of {
 
 /// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *none of the values* in the set.
 ///
-/// # Lazy Evaluation
-/// If we write `let cond = none_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = (a<c) && (b<c)`. That means that the comparisons are
-/// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
-/// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for an expression `none_of!({1,some_func()}<5)`,
-/// the function `some_func()` is not invoked.
-///
-/// # Macro Syntax and Examples
-/// The macro is called as `none_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
-/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
-/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
-/// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
-/// the expressions need not be numeric.
+/// # Usage
+/// The usage is analogous to the [any_of](crate::any_of) macro and is documented in more detail there.
+/// Just like `any_of`, this macro also performs lazy evaluation.
 ///
 /// ## Examples
 /// The following examples show how to use the macro.
@@ -143,6 +150,18 @@ macro_rules! all_of {
 /// ```
 #[macro_export]
 macro_rules! none_of {
+    ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
+        none_of!({$($lh_sides),+}.map($($func)+)==true)
+    };
+
+    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+        {
+            $crate::__check_operator!($operator);
+            let map_func = $($func)+;
+            $( !(map_func($lh_sides) $operator $rhs) )&&+
+        }
+    };
+
     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
@@ -153,6 +172,8 @@ macro_rules! none_of {
 
 // TODO FINISH THIS UP, TEST IT AND DOCUMENT IT
 // TODO: make this as simple as the ones above w/o recursion
+// TODO maybe make the syntax exactly!( 12 of {a,b,...} <= 5) possible. Maybe we can even allow
+// an ident instead of the literal. We probably can't allow an expression, but that is fine...
 // #[macro_export]
 // macro_rules! exactly_one_of {
 //     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
