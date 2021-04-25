@@ -5,9 +5,6 @@
 use crate::any_of;
 use rand::prelude::*;
 
-#[macro_use]
-use super::helper::*;
-
 #[test]
 fn any_of_with_map_comparisons_give_correct_result_for_operator_equal() {
     // test very simple expressions
