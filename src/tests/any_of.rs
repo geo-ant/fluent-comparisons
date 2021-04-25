@@ -96,7 +96,7 @@ fn expressions_are_short_circuited_and_evaluated_left_to_right() {
 fn test_random_collection_of_values_behave_correctly() {
     let mut rng = thread_rng();
 
-    for _ in 1..1000000 {
+    for _ in 1..100000 {
         let a = rng.gen_range(-5..5);
         let b = rng.gen_range(-5..5);
         let c = rng.gen_range(-5..5);
