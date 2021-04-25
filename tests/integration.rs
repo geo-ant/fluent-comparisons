@@ -11,3 +11,8 @@ use fluent_comparisons::none_of;
 fn test_chaining() {
     assert!(all_of!({1,2,3} <= 4) && none_of!({-1,0,-100}>0) && any_of!({-1,2,3}==2));
 }
+
+#[test]
+fn test_nesting() {
+    todo!("add test for nesting all_of, none_of and any_of");
+}
