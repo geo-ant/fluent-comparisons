@@ -18,19 +18,19 @@ macro_rules! assert_all_eq {
 
 #[test]
 fn test_assert_all_eq_success_cases() {
-    assert_all_eq!(5,4+1,3+2);
-    assert_all_eq!(5usize.pow(2),25,6*6-11,20+5);
-    assert_all_eq!(5*5,4*4+9);
+    assert_all_eq!(5, 4 + 1, 3 + 2);
+    assert_all_eq!(5usize.pow(2), 25, 6 * 6 - 11, 20 + 5);
+    assert_all_eq!(5 * 5, 4 * 4 + 9);
 }
 
 #[test]
 #[should_panic]
 fn test_assert_all_eq_failure_case1() {
-    assert_all_eq!(5,4+1,3+3);
+    assert_all_eq!(5, 4 + 1, 3 + 3);
 }
 
 #[test]
 #[should_panic]
 fn test_assert_all_eq_failure_case2() {
-    assert_all_eq!(5usize.pow(2),25,6*6-10,20+5);
+    assert_all_eq!(5usize.pow(2), 25, 6 * 6 - 10, 20 + 5);
 }
