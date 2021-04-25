@@ -7,7 +7,7 @@ use crate::any_of;
 #[test]
 fn any_of_comparisons_give_correct_result_for_operator_equal() {
     // test very simple expressions with 2 elements
-    assert_eq!(any_of!({3,4,5}.satisfies(|x|x%2==0)), true);
+    assert_eq!(any_of!({3,4,5}.satisfy(|x|x%2==0)), true);
     assert_eq!(any_of!({3,4,5}.map(|x|x%2)==0), true);
     assert_eq!(any_of!({ 4 }.map(|x|x*x) == 4), true);
     assert_eq!(any_of!({ 2 } == 4), false);

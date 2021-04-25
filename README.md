@@ -1,7 +1,8 @@
 # fluent-comparisons
 ![build](https://github.com/geo-ant/fluent-comparisons/workflows/build/badge.svg?branch=main)
-![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg?branch=main)
 ![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg?branch=main)
+![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg?branch=main)
+![approval-tests](https://github.com/geo-ant/fluent-comparisons/workflows/approval-tests/badge.svg?branch=main)
 
 **Fluent syntax for multi-comparisons.**
 
