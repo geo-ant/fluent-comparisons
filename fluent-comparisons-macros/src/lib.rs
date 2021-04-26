@@ -27,37 +27,73 @@ macro_rules! __check_operator {
 /// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *any of the values* in the set.
 ///
 /// # Lazy Evaluation
+///
 /// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = a<c && b<c`. That means that the comparisons are
 /// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
 /// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for the expression `any_of!({1,some_func()}<5)`,
 /// the function `some_func()` is not invoked.
 ///
-///TODO: SPLIT DOCUMENTATION INTO THE BASIC USAGE, THE USAGE WITH TRANSFORMATIONS (MAP) AND THE USAGE WITH A PREDICATE (for predicate
-/// say that using the simple comparison operators makes not so much sense, but more complex predicates like is_prime or is_encrypted could make sense)
-/// also say that the predicate must be a function of the data to bool
+/// # Usage
 ///
-/// # Macro Syntax and Examples
-/// The macro is called as `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
+/// # Basic Use Case
+///
+/// For the basic use case we compare a set of values against a common right hand side. Invoke the macro using
+/// `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
 /// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
-/// is an expression as well. The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
+/// is an expression as well.
+///
+/// The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
 /// curly braces. The expressions on the left hand side need not be of the same type, but the comparison with the right hand side must be valid. In particular,
 /// the expressions need not be numeric.
 ///
-/// ## Examples
-/// The following examples show how to use the macro.
 /// ```
 /// # use fluent_comparisons_macros::any_of;
 /// use rand::prelude::*;
-///
+/// // given:
 /// let square = |val|val*val;
-/// // the following assertion holds
-/// assert!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}>8));
-///
 /// let v = vec![1, 2,3];
 /// let mut rng = rand::thread_rng();
-/// // the following assertion holds
+/// // the following assertions hold
+/// assert!(any_of!({1,2,3}>2));
+/// assert!(any_of!({4+4+1,square(7*2),120_i32.pow(2)}>8));
 /// assert!(any_of!( {rng.gen::<usize>(),v.len(),2,1+1,"hello world".len()} == v.len()));
 /// ```
+///
+/// # Usage with Transformations
+///
+/// We can also apply a transformation to the list on the left hand side before comparing to the right hand side.
+/// For that, simply append `.map(...)` to the list and give an argument that transforms the values. The argument
+/// to map can be any kind of invokable of a single argument, like a function or closure. Here the type requirements
+/// are a bit stricter and all values on the left hand side must be of the same type.
+///
+/// ```
+/// # use fluent_comparisons_macros::any_of;
+/// // given
+/// let square = |x|x*x;
+/// // the following assertions hold
+/// assert!(any_of!({4,square(2),2_i32.pow(2)}.map(|x|x+5)>8));
+/// assert!(any_of!({4+1,3,5}.map(square)==9));
+/// ```
+///
+/// # Usage with Predicates
+///
+/// This is a special case where the transformation goes to a boolean predicate. Instead of writing
+/// `any_of!({...}.map(/*predicate f:x -> bool*/)==true)`, we can use the syntax `any_of!({...}.satisfy(/*predicate f:x -> bool*/))`,
+/// which saves us the comparison with `true` on the right hand side. Don't use a predicate which
+/// compares values with one of the comparison operators, because then you are better served with the
+/// syntax above. Rather use it for more complex predicates:
+///
+/// ```
+/// # use fluent_comparisons_macros::any_of;
+/// fn is_prime_number(x:i32) -> bool {
+/// /*some interesting math*/
+/// # true
+/// };
+/// //this assertion holds
+/// assert!(any_of!({12,14,5}.satisfy(is_prime_number)));
+/// ```
+///
+///
 #[macro_export]
 macro_rules! any_of {
     // variant with a predicate (does not use a comparison operator and rhs)
