@@ -8,3 +8,4 @@ mod macro_expansion;
 mod none_of;
 mod theorems;
 mod all_of_with_map;
+mod none_of_with_map;
