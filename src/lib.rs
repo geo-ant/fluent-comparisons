@@ -17,9 +17,20 @@
 //! # }
 //! ```
 //!
-//! ## Brief Description and Key Advantages
+//! # Examples
+//! The crate provides the macros `any_of`, `all_of` and `none_of` to facilitate writing expressive multicomparisons. The arguments
+//! don't need to be numeric, but can be expressions of any type. Furthermore, a syntax for applying transformations to the set
+//! on the left hand side is provided.
 //!
-//! The crate provides the macros `any_of`, `all_of` and `none_of` to facilitate writing expressive multicomparisons.
+//! ```
+//! # use fluent_comparisons::{all_of,none_of,any_of};
+//! // the following assertions hold
+//! assert!(none_of!({1,2,3}>4));
+//! assert!(any_of!({1,2,3}.map(|x|x%2)==0));
+//! ```
+//!
+//! # Brief Description and Key Advantages
+//!
 //! In addition to providing an intuitive syntax, the macros compile to the same assembly as
 //! the handwritten code ([check it on godbolt.org](https://godbolt.org/z/M3494a6Mc)).
 //!
@@ -36,14 +47,16 @@
 //! // is never performed
 //! let b = any_of!({cheap_calc(arg1), expensive_calc(arg2)}<=5);
 //! // whereas if we did this, the expensive calculation would be
-//! // performed regardless of the result of cheap_calculation(arg1)
+//! // performed regardless of the result of cheap_calc(arg1)
 //! let b = [cheap_calc(arg1), expensive_calc(arg2)].iter().any(|val|val<=&5);
 //! # }
 //! ```
 //!
+//! And finally, you can rest assured in the warm and fuzzy feeling that this crate is excessively tested.
+//!
 //! ## Usage
 //!
-//! Refer to the items in the documentation below to learn about the usage of the macros.
+//! Refer to the items in the documentation below to learn more about the usage of the macros.
 
 pub use fluent_comparisons_macros::any_of;
 

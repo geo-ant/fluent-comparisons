@@ -1,6 +1,6 @@
 [package]
 name = "fluent-comparisons"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["geo-ant <geos.blog@posteo.de>"]
 edition = "2018"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
@@ -18,7 +18,7 @@ keywords = ["fluent","DRY","multi","comparison","expressions"]
 # be used, but on crates.io the version dependency will be used, which is just extremely helpful for development.
 # See this Reddit post: https://www.reddit.com/r/rust/comments/a39er8/how_do_you_publish_your_cargo_workspace_packages/
 # And the Rust Doc: https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-path-dependencies
-fluent-comparisons-macros = {version = "0.2.0", path = "fluent-comparisons-macros"}
+fluent-comparisons-macros = {version = "0.3.0", path = "fluent-comparisons-macros"}
 
 [workspace]
 members = ["fluent-comparisons-macros"]
