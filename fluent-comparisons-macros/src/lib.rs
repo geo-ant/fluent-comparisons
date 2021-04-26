@@ -28,14 +28,14 @@ macro_rules! __check_operator {
 ///
 /// # Lazy Evaluation
 ///
-/// If we write `let cond = any_of!({a,b}<c)`, this is equivalent to the hand coded `let cond = a<c && b<c`. That means that the comparisons are
+/// If we write `any_of!({a,b}<c)`, this is equivalent to the hand coded `a<c && b<c`. That means that the comparisons are
 /// evaluated [lazily](https://doc.rust-lang.org/reference/expressions/operator-expr.html#lazy-boolean-operators) from left to right. Once
 /// the truth value of the expression can be determined, the evaluation stops. That means that e.g. for the expression `any_of!({1,some_func()}<5)`,
 /// the function `some_func()` is not invoked.
 ///
 /// # Usage
 ///
-/// # Basic Use Case
+/// ## Basic Usage
 ///
 /// For the basic use case we compare a set of values against a common right hand side. Invoke the macro using
 /// `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
@@ -59,7 +59,7 @@ macro_rules! __check_operator {
 /// assert!(any_of!( {rng.gen::<usize>(),v.len(),2,1+1,"hello world".len()} == v.len()));
 /// ```
 ///
-/// # Usage with Transformations
+/// ## Usage with Transformations
 ///
 /// We can also apply a transformation to the list on the left hand side before comparing to the right hand side.
 /// For that, simply append `.map(...)` to the list and give an argument that transforms the values. The argument
@@ -75,9 +75,9 @@ macro_rules! __check_operator {
 /// assert!(any_of!({4+1,3,5}.map(square)==9));
 /// ```
 ///
-/// # Usage with Predicates
+/// ## Usage with Predicates
 ///
-/// This is a special case where the transformation goes to a boolean predicate. Instead of writing
+/// This is a special case where the transformation maps to a boolean predicate. Instead of writing
 /// `any_of!({...}.map(/*predicate f:x -> bool*/)==true)`, we can use the syntax `any_of!({...}.satisfy(/*predicate f:x -> bool*/))`,
 /// which saves us the comparison with `true` on the right hand side. Don't use a predicate which
 /// compares values with one of the comparison operators, because then you are better served with the
@@ -86,7 +86,7 @@ macro_rules! __check_operator {
 /// ```
 /// # use fluent_comparisons_macros::any_of;
 /// fn is_prime_number(x:i32) -> bool {
-/// /*some interesting math*/
+///     /*some interesting math*/
 /// # true
 /// };
 /// //this assertion holds
