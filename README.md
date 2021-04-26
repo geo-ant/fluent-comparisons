@@ -28,7 +28,7 @@ on the left hand side is provided.
 // the following assertions hold
 assert!(none_of!({1,2,3}>4));
 assert!(any_of!({1,2,3}.map(|x|x%2)==0));
-assert!(all_of({2,5,7}.satisfy(is_prime_number)));
+assert!(all_of!({2,5,7}.satisfy(is_prime_number)));
 ```
 
 ## Brief Description and Key Advantages
