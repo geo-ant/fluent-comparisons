@@ -62,6 +62,7 @@ fn test_none_of_comparisons_for_other_operators() {
 // Inspired by the "Beautiful Testing" chapter in the book "Beautiful Code", O'Reilly
 // https://www.oreilly.com/library/view/beautiful-code/9780596510046/
 #[allow(clippy::nonminimal_bool)]
+#[allow(clippy::int_plus_one)]
 fn test_random_collection_of_values_behave_correctly() {
     let mut rng = thread_rng();
 
