@@ -17,7 +17,11 @@ macro_rules! __check_operator {
     (<) => {};
     (>) => {};
     // everything else is not allowed, including &&, ||, and such
-    ($other:tt) => {std::compile_error!("This operator is not allowed. The only allowed operators are ==, !=, <=, >=, <, >");}
+    ($other:tt) => {
+        std::compile_error!(
+            "This operator is not allowed. The only allowed operators are ==, !=, <=, >=, <, >"
+        );
+    };
 }
 
 /// Compare all values in a set to a common right hand side and decide whether the comparison returns `true` for *any of the values* in the set.
