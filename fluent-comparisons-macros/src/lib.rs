@@ -11,10 +11,25 @@ use proc_macro2::Span;
 mod keywords {
     syn::custom_keyword!(satisfy);
     syn::custom_keyword!(map);
+    syn::custom_keyword!(of);
 }
 
-/// a structure to parse the pattern
-struct NumberOf {}
+/// a structure to parse the pattern `$n::tt of`, where n must be an unsigned integer number
+struct NumberOf {
+    /// the number
+    n : syn::LitInt,
+    /// the keyword of
+    of : keywords::of,
+}
+
+impl Parse for NumberOf {
+    fn parse(input: &ParseBuffer) -> Result<Self, syn::Error> {
+        Ok(Self {
+            n : input.parse()?,
+            of : input.parse()?,
+        })
+    }
+}
 
 
 /// Parses a pattern `{$($exprs:expr),*} $op:tt $rhs:expr`, or `{$($exprs:expr),*}.map($($f:tt)*) $op:tt $rhs:expr`,
