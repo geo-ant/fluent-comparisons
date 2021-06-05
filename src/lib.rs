@@ -77,7 +77,7 @@ macro_rules! __check_operator {
     // everything else is not allowed, including &&, ||, and such
     ($other:tt) => {
         std::compile_error!(
-            "This operator is not allowed. The only allowed operators are ==, !=, <=, >=, <, >"
+            "Illegal comparison operator. The only allowed operators are ==, !=, <=, >=, <, >"
         );
     };
 }
