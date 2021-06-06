@@ -272,6 +272,8 @@ macro_rules! none_of {
     };
 }
 
+//TODO DOCUMENT
+pub use fluent_comparisons_macros::exactly;
 
 #[cfg(test)]
 mod tests;

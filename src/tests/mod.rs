@@ -9,3 +9,4 @@ mod macro_expansion;
 mod none_of;
 mod none_of_with_map;
 mod theorems;
+mod exactly;

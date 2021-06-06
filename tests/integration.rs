@@ -6,6 +6,7 @@
 use fluent_comparisons::all_of;
 use fluent_comparisons::any_of;
 use fluent_comparisons::none_of;
+use fluent_comparisons::exactly;
 
 #[test]
 // test chaining the expressions

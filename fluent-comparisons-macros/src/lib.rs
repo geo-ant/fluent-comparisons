@@ -7,6 +7,9 @@ use syn::parse::{Parse, ParseBuffer};
 use syn::punctuated::Punctuated;
 use syn::spanned::Spanned;
 use proc_macro2::Span;
+use syn::parse_macro_input;
+
+use quote::quote;
 
 mod keywords {
     syn::custom_keyword!(satisfy);
@@ -14,12 +17,54 @@ mod keywords {
     syn::custom_keyword!(of);
 }
 
+#[derive(Debug,Clone)]
+struct ExactlyMacroPat {
+    number_of : NumberOf,
+    comparison_expr : ComparisonExpression,
+}
+
+impl Parse for ExactlyMacroPat {
+    fn parse(input: & ParseBuffer) -> Result<Self, syn::Error> {
+
+        Ok(Self {
+            number_of : input.parse()?,
+            comparison_expr : input.parse()?,
+        })
+    }
+}
+
 /// a structure to parse the pattern `$n::tt of`, where n must be an unsigned integer number
+#[derive(Debug,Clone)]
 struct NumberOf {
     /// the number
-    n : syn::LitInt,
+    n : Number,
     /// the keyword of
     of : keywords::of,
+}
+
+#[derive(Clone,Debug)]
+enum Number {
+    Literal(syn::LitInt),
+    Identifier(syn::Ident),
+}
+
+use syn::parse::discouraged::Speculative;
+
+impl Parse for Number {
+    fn parse(input: & ParseBuffer) -> Result<Self, syn::Error> {
+        let fork = input.fork();
+        if let Ok(literal) = fork.parse::<syn::LitInt>() {
+            input.advance_to(&fork);
+            return Ok(Self::Literal(literal))
+        }
+        let fork = input.fork();
+        if let Ok(ident) = fork.parse::<syn::Ident>() {
+            input.advance_to(&fork);
+            return Ok(Self::Identifier(ident))
+        }
+
+        Err(syn::Error::new(input.span(),"expected integer literal or identifier"))
+    }
 }
 
 impl Parse for NumberOf {
@@ -30,7 +75,6 @@ impl Parse for NumberOf {
         })
     }
 }
-
 
 /// Parses a pattern `{$($exprs:expr),*} $op:tt $rhs:expr`, or `{$($exprs:expr),*}.map($($f:tt)*) $op:tt $rhs:expr`,
 /// or `{$($exprs:expr),*}.satisfy($($f:tt)*)`. This is the pattern that is given
@@ -64,10 +108,13 @@ fn check_comparison_operator(op: &BinOp) -> Result<(), syn::Error> {
 
 impl Parse for ComparisonExpression {
     fn parse(input: &ParseBuffer) -> Result<Self, syn::Error> {
+
         let content;
         let _: syn::token::Brace = syn::braced!(content in input);
-        let exprs = Punctuated::<Expr, syn::Token![,]>::parse_terminated(input)?;
+        let exprs = Punctuated::<Expr, syn::Token![,]>::parse_terminated(&content)?;
         let transform_call: TransformCall = input.parse()?;
+
+
         // parse the operators based on the transformation. For .satisfy(...) we expect no
         // op and rhs given and will assign (op,rhs) = (==, true). Otherwise we parse what the
         // user wrote
@@ -77,7 +124,7 @@ impl Parse for ComparisonExpression {
             }
             TransformCall::Satisfy(_) => {
                 // here we make sure that nothing is left to parse after .satisfy(...)
-                if input.is_empty() {
+                if !input.is_empty() {
                     return Err(syn::Error::new(input.span(), "Unexpected tokens after .satisfy(...)"));
                 }
                 // the equality comparison operator "=="
@@ -151,7 +198,7 @@ impl Parse for TransformKind {
 impl Parse for TransformCall {
     fn parse(input: &ParseBuffer) -> Result<Self, syn::Error> {
         if input.peek(syn::Token![.]) {
-            let _: syn::Token![,] = input.parse()?;
+            let _: syn::Token![.] = input.parse()?;
             let transform_kind: TransformKind = input.parse()?;
             let content;
             let _: syn::token::Paren = syn::parenthesized!(content in input);
@@ -170,5 +217,11 @@ impl Parse for TransformCall {
 
 #[proc_macro]
 pub fn exactly(input: TokenStream) -> TokenStream {
-    input
+    let i2 = input.clone();
+    let _x = parse_macro_input!(i2 as ExactlyMacroPat);
+
+    let tokens = quote! {
+        true
+    };
+    tokens.into()
 }
