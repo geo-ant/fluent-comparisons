@@ -8,28 +8,19 @@ use rand::prelude::*;
 #[test]
 fn any_of_with_map_comparisons_give_correct_result_for_operator_equal() {
     // test very simple expressions
-    assert_eq!(all_of!({2,4,6}.satisfy(|x|x%2==0)), true);
-    assert_eq!(all_of!({2,4,6}.map(|x|x%2)==0), true);
-    assert_eq!(all_of!({ 2 }.map(|x| x * x) == 4), true);
+    assert!(all_of!({2,4,6}.satisfy(|x|x%2==0)));
+    assert!(all_of!({2,4,6}.map(|x|x%2)==0));
+    assert!(all_of!({ 2 }.map(|x| x * x) == 4));
     assert_eq!(all_of!({ 4,4 }.map(|x:i32|x.pow(2)) == 4), false);
 
     // test more complicated expressions
 
-    let v = vec![1, 2];
+    let v = [1, 2];
     let twice = |x| 2 * x;
     let two = 2;
-    assert_eq!(
-        all_of!( {6,3*v.len(),twice(3)}.map(twice) == 2*(twice(2)+two)),
-        true
-    );
-    assert_eq!(
-        all_of!( {2,2_usize.pow(1),1+1}.map(|x:usize|-(x as i64)) == -(v.len() as i64)),
-        true
-    );
-    assert_eq!(
-        all_of!( {2,1+1,v.len()}.satisfy(|x|x==v.len().pow(1))),
-        true
-    );
+    assert!(all_of!( {6,3*v.len(),twice(3)}.map(twice) == 2*(twice(2)+two)));
+    assert!(all_of!( {2,2_usize.pow(1),1+1}.map(|x:usize|-(x as i64)) == -(v.len() as i64)));
+    assert!(all_of!( {2,1+1,v.len()}.satisfy(|x|x==v.len().pow(1))));
 }
 
 #[test]
@@ -38,31 +29,28 @@ fn any_of_with_map_comparisons_give_correct_result_for_operator_equal() {
 fn all_of_comparisons_give_correct_result_for_other_operators() {
     let twice = |x: usize| x + x;
 
-    let v = vec!["hello", "there", "this", "is", "a", "test"];
+    let v = ["hello", "there", "this", "is", "a", "test"];
     // !=
-    assert_eq!(all_of!( {6,v.len(),2+2+2}.map(|x|x-1) != 6), true);
+    assert!(all_of!( {6,v.len(),2+2+2}.map(|x|x-1) != 6));
     assert_eq!(all_of!( {2*2+1,v.len(),twice(3)}.satisfy(|x|x != 6)), false);
 
     // <=
-    assert_eq!(all_of!( {1,v.len(),twice(2)}.satisfy(|x|x <= 6)), true);
+    assert!(all_of!( {1,v.len(),twice(2)}.satisfy(|x|x <= 6)));
     assert_eq!(
         all_of!( {5,v.len()-1,twice(2)}.map(|x|x+6) <= v.len()),
         false
     );
     // >=
-    assert_eq!(all_of!({4,9,5,3,-1,2}.satisfy(|x|x>=-2)), true);
+    assert!(all_of!({4,9,5,3,-1,2}.satisfy(|x|x>=-2)));
     assert_eq!(all_of!({4,2*2*2,5,10,11,22}.map(|x|x/5) >= 4), false);
     // <
-    assert_eq!(all_of!( {1,v.len()-1,twice(2)}.satisfy(|x|x < 6)), true);
+    assert!(all_of!( {1,v.len()-1,twice(2)}.satisfy(|x|x < 6)));
     assert_eq!(
         all_of!( {2*2+1,v.len()-5,twice(2),11-10,5}.map(|x|10*x) < 6),
         false
     );
     // >
-    assert_eq!(
-        all_of!({104,99,15,13,11,twice(4)}.satisfy(|x|x > v.len())),
-        true
-    );
+    assert!(all_of!({104,99,15,13,11,twice(4)}.satisfy(|x|x > v.len())));
     assert_eq!(
         all_of!({104,99,36+15,36+13,36+11,36+twice(4)}.map(|x|x-6*6) > v.len()*6),
         false

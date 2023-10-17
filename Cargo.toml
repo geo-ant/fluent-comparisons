@@ -1,15 +1,15 @@
 [package]
 name = "fluent-comparisons"
-version = "0.3.1"
+version = "1.0.0"
 authors = ["geo-ant <geos.blog@posteo.de>"]
-edition = "2018"
+edition = "2021"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
 repository = "https://github.com/geo-ant/fluent-comparisons"
 categories = ["algorithms", "development tools"]
 description = "Boost readability by writing multicomparison expressions like `if any_of!({a,b,c}>=5) {...}` while keeping the benefits of hand-written code."
 readme = "README.md"
 license = "MIT"
-keywords = ["fluent","DRY","multi","comparison","expressions"]
+keywords = ["fluent", "DRY", "multi", "comparison", "expressions"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -18,7 +18,7 @@ keywords = ["fluent","DRY","multi","comparison","expressions"]
 # be used, but on crates.io the version dependency will be used, which is just extremely helpful for development.
 # See this Reddit post: https://www.reddit.com/r/rust/comments/a39er8/how_do_you_publish_your_cargo_workspace_packages/
 # And the Rust Doc: https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-path-dependencies
-fluent-comparisons-macros = {version = "0.3.0", path = "fluent-comparisons-macros"}
+fluent-comparisons-macros = { version = "1.0.0", path = "fluent-comparisons-macros" }
 
 [workspace]
 members = ["fluent-comparisons-macros"]

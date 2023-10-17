@@ -1,8 +1,10 @@
 # fluent-comparisons
+
 ![build](https://github.com/geo-ant/fluent-comparisons/workflows/build/badge.svg?branch=main)
-![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg?branch=main)
 ![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg?branch=main)
-![approval-tests](https://github.com/geo-ant/fluent-comparisons/workflows/approval-tests/badge.svg?branch=main)
+![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/geo-ant/fluent-comparisons/badge.svg?branch=main)](https://coveralls.io/github/geo-ant/fluent-comparisons?branch=main)
+![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
 **Fluent syntax for multi-comparisons.**
 
@@ -53,7 +55,7 @@ And finally, you can rest assured in the warm and fuzzy feeling that this crate 
 Use the macros by writing `any_of!({/*list of expressions*/} operator rhs)`, 
 where operator can be any of the binary comparison operators, 
 i.e. `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side 
-is comma separated without a trailing comma. The right hand side is an expression as well.
+is comma separated. The right hand side of the comparison is an expression as well.
 
 The list of expressions can have a variadic number of elements but must have at least one.
 It must always be enclosed in curly braces. The expressions on the left hand side need not be 

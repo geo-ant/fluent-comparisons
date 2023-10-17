@@ -1,4 +1,4 @@
-///! This crate contains the macros for the fluent-comparisons crate
+//! This crate contains the macros for the fluent-comparisons crate
 
 #[macro_export]
 #[doc(hidden)]
@@ -39,7 +39,7 @@ macro_rules! __check_operator {
 ///
 /// For the basic use case we compare a set of values against a common right hand side. Invoke the macro using
 /// `any_of!({/*list of expressions*/} operator rhs)`, where operator can be any of the binary comparison operators, i.e.
-/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated without a trailing comma. The right hand side
+/// `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side is comma separated. The right hand side
 /// is an expression as well.
 ///
 /// The list of expressions can have a variadic number of elements but must have at least one. It must always be enclosed in
@@ -97,12 +97,12 @@ macro_rules! __check_operator {
 #[macro_export]
 macro_rules! any_of {
     // variant with a predicate (does not use a comparison operator and rhs)
-    ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
+    ( {$($lh_sides:expr),+ $(,)?}.satisfy($($func:tt)+) ) => {
         any_of!({$($lh_sides),+}.map($($func)+)==true)
     };
 
     // variant with a transformation of the set
-    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+    ( {$($lh_sides:expr),+ $(,)?}.map($($func:tt)+) $operator:tt $rhs:expr) => {
         {
             $crate::__check_operator!($operator);
             //by fixing this here, we have more type deduction powers but also less
@@ -119,7 +119,7 @@ macro_rules! any_of {
     };
 
     //variant without map (requires a comparison operator and rhs)
-    ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
+    ( {$($lh_sides:expr),+ $(,)?} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
             $( ($lh_sides $operator $rhs) )||+
@@ -149,11 +149,11 @@ macro_rules! any_of {
 #[macro_export]
 macro_rules! all_of {
 
-    ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
+    ( {$($lh_sides:expr),+ $(,)?}.satisfy($($func:tt)+) ) => {
         all_of!({$($lh_sides),+}.map($($func)+)==true)
     };
 
-    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+    ( {$($lh_sides:expr),+ $(,)?}.map($($func:tt)+) $operator:tt $rhs:expr) => {
         {
             $crate::__check_operator!($operator);
             let map_func = $($func)+;
@@ -161,7 +161,7 @@ macro_rules! all_of {
         }
     };
 
-    ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
+    ( {$($lh_sides:expr),+ $(,)?} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
             $( ($lh_sides $operator $rhs) )&&+
@@ -190,11 +190,11 @@ macro_rules! all_of {
 /// ```
 #[macro_export]
 macro_rules! none_of {
-    ( {$($lh_sides:expr),+}.satisfy($($func:tt)+) ) => {
+    ( {$($lh_sides:expr),+ $(,)?}.satisfy($($func:tt)+) ) => {
         none_of!({$($lh_sides),+}.map($($func)+)==true)
     };
 
-    ( {$($lh_sides:expr),+}.map($($func:tt)+) $operator:tt $rhs:expr) => {
+    ( {$($lh_sides:expr),+ $(,)?}.map($($func:tt)+) $operator:tt $rhs:expr) => {
         {
             $crate::__check_operator!($operator);
             let map_func = $($func)+;
@@ -202,36 +202,10 @@ macro_rules! none_of {
         }
     };
 
-    ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
+    ( {$($lh_sides:expr),+ $(,)?} $operator:tt $rhs:expr)=> {
         {
             $crate::__check_operator!($operator);
             $( !($lh_sides $operator $rhs) )&&+
         }
     };
 }
-
-// TODO FINISH THIS UP, TEST IT AND DOCUMENT IT
-// TODO: make this as simple as the ones above w/o recursion
-// TODO maybe make the syntax exactly!( 12 of {a,b,...} <= 5) possible. Maybe we can even allow
-// an ident instead of the literal. We probably can't allow an expression, but that is fine...
-// #[macro_export]
-// macro_rules! exactly_one_of {
-//     //TODO CAUTION: THIS COULD BE CALLED WITH ONE ARGUMENT. MAKE SURE THAT THIS PRODUCES A VALID RESULT
-//     // expression like any_of!( {1,v.len(),4} < 3)
-//     ( {$($lh_sides:expr),+} $operator:tt $rhs:expr)=> {
-//         {
-//             $crate::__check_operator!($operator);
-//             1u32 == exactly_one_of!(@internal lhs={$($lh_sides),+}, op=[$operator], rhs = $rhs, expanded = {0u32})
-//         }
-//     };
-//
-//     // internal rules, recursion final case
-//     (@internal lhs = {$head:expr},op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) => {
-//         $expanded + {if $head $op $rhs {1u32}else{0u32}}
-//     };
-//
-//     // internal rules, recursion case
-//     (@internal lhs = {$head:expr, $($tail:expr),*}, op = [$op:tt], rhs = $rhs:expr, expanded = {$expanded:expr}) =>{
-//         exactly_one_of!(@internal lhs={$($tail),*}, op=[$op], rhs = $rhs, expanded = {$expanded + {if $head $op $rhs {1u32}else{0u32}}})
-//     };
-// }
