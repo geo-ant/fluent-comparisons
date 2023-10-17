@@ -20,21 +20,21 @@ fn all_of_comparisons_give_correct_result_for_operator_equal() {
     assert_eq!(all_of!({ 2 } == 4), false);
     assert_eq!(all_of!( {4,2} == 4), false);
     assert_eq!(all_of!( {2,4} == 4), false);
-    assert_eq!(all_of!( {2,2} == 2), true);
-    assert_eq!(all_of!( {4,4} == 4), true);
+    assert!(all_of!( {2,2} == 2));
+    assert!(all_of!( {4,4} == 4));
 
     // expressions involving function calls and variable
     // make sure the non-matching expression changes position
-    let v = vec![1, 2, 3];
+    let v = [1, 2, 3];
     let two = 2;
-    assert_eq!(all_of!( {6,2*v.len(),twice(3)} == twice(2)+two), true);
+    assert!(all_of!( {6,2*v.len(),twice(3)} == twice(2)+two));
     assert_eq!(all_of!( {6+2,2*v.len(),twice(3)} == 3+3), false);
     assert_eq!(all_of!( {6,200*v.len(),twice(3)} == 4+2), false);
     assert_eq!(all_of!( {6,2*v.len(),twice(3)/2} == 5+1), false);
 
     // some other expressions for good measure
     assert_eq!(all_of!( {4,4,4,1,-1,2,4} == 4), false);
-    assert_eq!(all_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6), true);
+    assert!(all_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6));
     assert_eq!(
         all_of!( {6,6,6,6,6,2_i32.pow(2)+2,2*v.len(),1234} == 6),
         false
@@ -45,22 +45,22 @@ fn all_of_comparisons_give_correct_result_for_operator_equal() {
 // due to the implementation of the macro it should not matter which comparison operator
 // we actually put in there, but we'll test it anyway just to be sure
 fn all_of_comparisons_give_correct_result_for_other_operators() {
-    let v = vec!["hello", "there", "this", "is", "a", "test"];
+    let v = ["hello", "there", "this", "is", "a", "test"];
     // !=
-    assert_eq!(all_of!( {1,2+v.len(),twice(3)-2} != 6), true);
+    assert!(all_of!( {1,2+v.len(),twice(3)-2} != 6));
     assert_eq!(all_of!( {2*2+1,v.len(),twice(3)} != 6), false);
 
     // <=
-    assert_eq!(all_of!( {1,v.len(),twice(2)} <= 6), true);
+    assert!(all_of!( {1,v.len(),twice(2)} <= 6));
     assert_eq!(all_of!( {2*2+1,v.len(),twice(2),-10,7} <= 6), false);
     // >=
-    assert_eq!(all_of!({4,9,5,3,-1,2}>=-2), true);
+    assert!(all_of!({4,9,5,3,-1,2}>=-2));
     assert_eq!(all_of!({4,2*2*2,5,3,-1,2} >= 4), false);
     // <
-    assert_eq!(all_of!( {1,v.len()-1,twice(2)} < 6), true);
+    assert!(all_of!( {1,v.len()-1,twice(2)} < 6));
     assert_eq!(all_of!( {2*2+1,v.len(),twice(2),-10,7} < 6), false);
     // >
-    assert_eq!(all_of!({104,99,15,13,11,twice(4)} > v.len()), true);
+    assert!(all_of!({104,99,15,13,11,twice(4)} > v.len()));
     assert_eq!(all_of!({104,99,15,13,11,twice(4)} > v.len()*6), false);
 }
 

@@ -10,27 +10,27 @@ fn twice(val: usize) -> usize {
 #[test]
 fn none_of_comparisons_give_correct_result_for_operator_equal() {
     // test simple expressions
-    assert_eq!(none_of!({ 4 } == 2), true);
+    assert!(none_of!({ 4 } == 2));
     assert_eq!(none_of!({ 4 } == 4), false);
-    assert_eq!(none_of!({"four","two"} == "three"), true);
+    assert!(none_of!({"four","two"} == "three"));
     assert_eq!(none_of!({"four","two"} == "two"), false);
     assert_eq!(none_of!({"two","two"} == "two"), false);
     assert_eq!(none_of!({"two","four"} == "two"), false);
 
     // more complex expressions
-    let v = vec![1, 2, 3];
+    let v = [1, 2, 3];
     let two = 2;
     assert_eq!(none_of!( {6,2*v.len(),twice(3)} == twice(2)+two), false);
     assert_eq!(none_of!( {6+2,2*v.len(),twice(3)} == 3+3), false);
     assert_eq!(none_of!( {6*6,200*v.len(),twice(3)} == 4+2), false);
-    assert_eq!(none_of!( {6+1,2*v.len()+2,twice(3)/2} == 5+1), true);
+    assert!(none_of!( {6+1,2*v.len()+2,twice(3)/2} == 5+1));
 
     // more complex expr
     assert_eq!(
         none_of!( {2_i32.pow(2)+2,2*v.len(),4+2,666-660} == 6),
         false
     );
-    assert_eq!(none_of!( {4,4,4,1,-1,2,4} == 3), true);
+    assert!(none_of!( {4,4,4,1,-1,2,4} == 3));
     assert_eq!(
         none_of!( {6,6,6,6,6,2_i32.pow(2)+2,2*v.len(),1234} == 6),
         false
@@ -39,22 +39,22 @@ fn none_of_comparisons_give_correct_result_for_operator_equal() {
 
 #[test]
 fn test_none_of_comparisons_for_other_operators() {
-    let v = vec!["hello", "there", "this", "is", "a", "test"];
+    let v = ["hello", "there", "this", "is", "a", "test"];
 
     // !=
     assert_eq!(none_of!({6,2_usize.pow(2),v.len(),7}!=6), false);
-    assert_eq!(none_of!({6,2_usize.pow(2)+2,v.len(),7-1}!=6), true);
+    assert!(none_of!({6,2_usize.pow(2)+2,v.len(),7-1}!=6));
     // <=
-    assert_eq!(none_of!({7,8,9}<=6), true);
+    assert!(none_of!({7,8,9}<=6));
     assert_eq!(none_of!({6,7,8,9}<=6), false);
     // >=
     assert_eq!(none_of!({7,8,9}>=6), false);
-    assert_eq!(none_of!({4,4,3,1}>=6), true);
+    assert!(none_of!({4,4,3,1}>=6));
     // >
     assert_eq!(none_of!({6,1,2,7,8,9}>6), false);
-    assert_eq!(none_of!({4,4,3,1,5}>6), true);
+    assert!(none_of!({4,4,3,1,5}>6));
     // <
-    assert_eq!(none_of!({6,7,8,9}<6), true);
+    assert!(none_of!({6,7,8,9}<6));
     assert_eq!(none_of!({7,8,6,2,7}<6), false);
 }
 
