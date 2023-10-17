@@ -37,9 +37,7 @@ fn test_none_of_comparisons_for_other_operators() {
     let twice = |x| x * 2;
     // !=
     assert_eq!(none_of!({3,2_usize.pow(2),v.len(),7}.map(twice)!=6), false);
-    assert!(
-        none_of!({6,2_usize.pow(2)+2,v.len(),7-1}.satisfy(|x|x!=6))
-    );
+    assert!(none_of!({6,2_usize.pow(2)+2,v.len(),7-1}.satisfy(|x|x!=6)));
     // <=
     assert!(none_of!({7,8,9}.satisfy(|x|x<=6)));
     assert_eq!(none_of!({7,7,8,9}.map(|x|x-1)<=6), false);

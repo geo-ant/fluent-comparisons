@@ -27,9 +27,7 @@ fn any_of_comparisons_give_correct_result_for_operator_equal() {
     //assert_eq!()
 
     let v = [1, 2];
-    assert!(
-        any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} <= -std::f64::EPSILON)
-    );
+    assert!(any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} <= -std::f64::EPSILON));
     assert!(any_of!( {v.len(),2_usize.pow(2),3*4+1} == v.len()));
     assert!(any_of!( {3_usize.pow(2),333,1+1} == v.len()));
     assert!(any_of!( {v.len(),2,1+1} == v.len()));

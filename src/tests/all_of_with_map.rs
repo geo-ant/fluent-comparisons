@@ -18,15 +18,9 @@ fn any_of_with_map_comparisons_give_correct_result_for_operator_equal() {
     let v = [1, 2];
     let twice = |x| 2 * x;
     let two = 2;
-    assert!(
-        all_of!( {6,3*v.len(),twice(3)}.map(twice) == 2*(twice(2)+two))
-    );
-    assert!(
-        all_of!( {2,2_usize.pow(1),1+1}.map(|x:usize|-(x as i64)) == -(v.len() as i64))
-    );
-    assert!(
-        all_of!( {2,1+1,v.len()}.satisfy(|x|x==v.len().pow(1)))
-    );
+    assert!(all_of!( {6,3*v.len(),twice(3)}.map(twice) == 2*(twice(2)+two)));
+    assert!(all_of!( {2,2_usize.pow(1),1+1}.map(|x:usize|-(x as i64)) == -(v.len() as i64)));
+    assert!(all_of!( {2,1+1,v.len()}.satisfy(|x|x==v.len().pow(1))));
 }
 
 #[test]
@@ -56,9 +50,7 @@ fn all_of_comparisons_give_correct_result_for_other_operators() {
         false
     );
     // >
-    assert!(
-        all_of!({104,99,15,13,11,twice(4)}.satisfy(|x|x > v.len()))
-    );
+    assert!(all_of!({104,99,15,13,11,twice(4)}.satisfy(|x|x > v.len())));
     assert_eq!(
         all_of!({104,99,36+15,36+13,36+11,36+twice(4)}.map(|x|x-6*6) > v.len()*6),
         false
