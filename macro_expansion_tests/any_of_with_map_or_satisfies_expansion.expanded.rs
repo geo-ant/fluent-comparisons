@@ -3,17 +3,13 @@ struct Dummy {
     pub length: usize,
 }
 #[automatically_derived]
-#[allow(unused_qualifications)]
 impl ::core::marker::Copy for Dummy {}
 #[automatically_derived]
-#[allow(unused_qualifications)]
 impl ::core::clone::Clone for Dummy {
     #[inline]
     fn clone(&self) -> Dummy {
-        {
-            let _: ::core::clone::AssertParamIsClone<usize>;
-            *self
-        }
+        let _: ::core::clone::AssertParamIsClone<usize>;
+        *self
     }
 }
 pub fn something() {
