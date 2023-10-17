@@ -55,7 +55,7 @@ And finally, you can rest assured in the warm and fuzzy feeling that this crate 
 Use the macros by writing `any_of!({/*list of expressions*/} operator rhs)`, 
 where operator can be any of the binary comparison operators, 
 i.e. `==`, `!=`, `<=`, `<`, `>`, and `>=`. The list of expressions on the left hand side 
-is comma separated without a trailing comma. The right hand side is an expression as well.
+is comma separated. The right hand side of the comparison is an expression as well.
 
 The list of expressions can have a variadic number of elements but must have at least one.
 It must always be enclosed in curly braces. The expressions on the left hand side need not be 
