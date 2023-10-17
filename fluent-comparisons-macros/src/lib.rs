@@ -1,4 +1,4 @@
-///! This crate contains the macros for the fluent-comparisons crate
+//! This crate contains the macros for the fluent-comparisons crate
 
 #[macro_export]
 #[doc(hidden)]
