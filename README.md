@@ -1,8 +1,8 @@
 # fluent-comparisons
 
-![build](https://github.com/geo-ant/varpro/workflows/build/badge.svg?branch=main)
-![tests](https://github.com/geo-ant/varpro/workflows/tests/badge.svg?branch=main)
-![lints](https://github.com/geo-ant/varpro/workflows/lints/badge.svg?branch=main)
+![build](https://github.com/geo-ant/fluent-comparisons/workflows/build/badge.svg?branch=main)
+![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg?branch=main)
+![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg?branch=main)
 [![Coverage Status](https://coveralls.io/repos/github/geo-ant/fluent-comparisons/badge.svg?branch=main)](https://coveralls.io/github/geo-ant/fluent-comparisons?branch=main)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
