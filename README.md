@@ -1,8 +1,8 @@
 # fluent-comparisons
 
-![build](https://github.com/geo-ant/fluent-comparisons/workflows/build/badge.svg)
-![tests](https://github.com/geo-ant/fluent-comparisons/workflows/tests/badge.svg)
-![lints](https://github.com/geo-ant/fluent-comparisons/workflows/lints/badge.svg)
+![build](https://github.com/geo-ant/fluent-comparisons/actions/workflows/build.yml/badge.svg?branch=main)
+![tests](https://github.com/geo-ant/fluent-comparisons/actions/workflows/tests.yml/badge.svg?branch=main)
+![lints](https://github.com/geo-ant/fluent-comparisons/actions/workflows/lints.yml/badge.svg?branch=main)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
 **Fluent syntax for multi-comparisons.**
