@@ -5,8 +5,9 @@ authors = ["geo-ant <geos.blog@posteo.de>"]
 edition = "2021"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
 repository = "https://github.com/geo-ant/fluent-comparisons"
-categories = ["algorithms", "development tools"]
+categories = ["development-tools", "rust-patterns", "algorithms"]
 description = "Boost readability by writing multicomparison expressions like `if any_of!({a,b,c}>=5) {...}` while keeping the benefits of hand-written code."
+
 readme = "README.md"
 license = "MIT"
 keywords = ["fluent", "DRY", "multi", "comparison", "expressions"]
