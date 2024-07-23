@@ -1,6 +1,6 @@
 [package]
 name = "fluent-comparisons"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["geo-ant <geos.blog@posteo.de>"]
 edition = "2021"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
