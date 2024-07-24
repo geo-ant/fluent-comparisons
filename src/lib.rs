@@ -1,3 +1,4 @@
+#![cfg_attr(not(test), no_std)]
 //! This crate is for you if you have ever been annoyed at writing repetitive conditions like this
 //! ```rust
 //! # fn test(a:i32,x:i32,y:i32,z:i32) {

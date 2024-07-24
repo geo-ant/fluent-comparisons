@@ -1,11 +1,11 @@
 [package]
 name = "fluent-comparisons"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["geo-ant <geos.blog@posteo.de>"]
 edition = "2021"
 homepage = "https://github.com/geo-ant/fluent-comparisons"
 repository = "https://github.com/geo-ant/fluent-comparisons"
-categories = ["development-tools", "rust-patterns", "algorithms"]
+categories = ["development-tools", "rust-patterns", "no-std"]
 description = "Boost readability by writing multicomparison expressions like `if any_of!({a,b,c}>=5) {...}` while keeping the benefits of hand-written code."
 
 readme = "README.md"
