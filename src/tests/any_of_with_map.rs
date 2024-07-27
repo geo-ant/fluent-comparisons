@@ -16,7 +16,7 @@ fn any_of_with_map_comparisons_give_correct_result_for_operator_equal() {
     // test more complicated expressions
 
     let v = [1, 2];
-    assert!(any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} <= -std::f64::EPSILON));
+    assert!(any_of!( {2f64.cos(),3f64.sin(),0f64.cos()} <= -f64::EPSILON));
     assert!(
         any_of!( {v.len(),2_usize.pow(2),3*4+1}.map(|x:usize|-(x as i64)) == -(v.len() as i64))
     );

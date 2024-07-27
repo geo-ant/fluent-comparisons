@@ -1,3 +1,5 @@
+#![allow(clippy::assertions_on_constants)]
+
 #[macro_use]
 pub mod helper;
 
