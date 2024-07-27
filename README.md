@@ -21,6 +21,11 @@ if all_of!({x,y,z} < a) {
 }
 ```
 
+## Support
+
+If you like this crate, recommend it to others. You can also [buy me a coffee](https://ko-fi.com/geoant)
+if you feel like it.
+
 ## Examples
 The crate provides the macros `any_of`, `all_of` and `none_of` to facilitate writing expressive multicomparisons. The arguments
 don't need to be numeric, but can be expressions of any type. Furthermore, a syntax for applying transformations and predicates to the set
